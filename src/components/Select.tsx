@@ -1,12 +1,15 @@
 import { themes } from "@/constants/theme";
 import { FontAwesomeFreeSolid } from "@react-native-vector-icons/fontawesome-free-solid";
+import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import { Alert } from "./Alert";
 
 export function Select(){
     const [visible, setVisible] = useState(false);
     const [selectedDestino, setSelectedDestino] = useState("Selecione o destino");
+    const [ error, setError ] = useState(false)
+    const [ msgError, setMsgError ] = useState("")
     const [ destinos, setDestinos ] = useState(
         [
             {nome: "Luanda"}, 
@@ -17,6 +20,16 @@ export function Select(){
         ]
     )
 
+    function handleGo(){
+        if(selectedDestino === "Selecione o destino"){
+            setMsgError("Falta selecionar a provincia")
+            setError(true)
+            return;
+        }
+
+        router.push("/tusristic")
+    }
+
     const handleSelectDestino = (nome: string) => {
         setSelectedDestino(nome);
         setVisible(false);
@@ -24,6 +37,9 @@ export function Select(){
     return(
         <View>
             <View style={styles.areaButton}>
+                {error && (
+                    <Alert title={msgError} onPress={()=>{}}/>
+                )}
                 <TouchableOpacity
                     activeOpacity={0.9}
                     style={styles.buttonSelect}
@@ -38,8 +54,7 @@ export function Select(){
                 <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.buttonGo}
-                    onPress={()=>{}}
-                    disabled={true}
+                    onPress={handleGo}
                 >
                     <Text style={styles.textGo}>Viajar</Text>
                     <FontAwesomeFreeSolid name="arrow-right" size={16} color={themes.colors.surface} />
