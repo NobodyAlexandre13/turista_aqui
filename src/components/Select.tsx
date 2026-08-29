@@ -38,7 +38,7 @@ export function Select(){
         <View>
             <View style={styles.areaButton}>
                 {error && (
-                    <Alert title={msgError} onPress={()=>{}}/>
+                    <Alert title={msgError} onPress={()=>setError(false)}/>
                 )}
                 <TouchableOpacity
                     activeOpacity={0.9}

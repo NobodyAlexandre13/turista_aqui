@@ -1,5 +1,5 @@
 import { themes } from "@/constants/theme";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 
 interface Props {
     title: string;
@@ -8,9 +8,9 @@ interface Props {
 
 export function Alert({title, onPress} : Props){
     return(
-        <View style={style.container}>
+        <Pressable onPress={onPress} style={style.container}>
             <Text style={style.text}>{title}</Text>
-        </View>
+        </Pressable>
     )
 }
 
