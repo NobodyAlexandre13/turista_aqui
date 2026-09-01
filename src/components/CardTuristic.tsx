@@ -1,16 +1,20 @@
 import { themes } from "@/constants/theme";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 
 interface Props {
     uri: string;
     nome: string;
 }
 
+const { width } = Dimensions.get('window');
+const larguraSlider = width * 0.9;
+
 export function CardTuristic({ uri, nome }: Props){
+
     return(
-        <View style={style.container}>
+        <View style={[style.container, { width: larguraSlider }]}>
             <LinearGradient  
                 colors={['transparent', '#0505052a', '#050505f3']}
                 style={style.grad}
@@ -29,10 +33,9 @@ export function CardTuristic({ uri, nome }: Props){
 
 const style = StyleSheet.create({
     container: {
-        width: 150,
         height: 200,
         borderRadius: 12,
-        marginLeft: 10
+        marginHorizontal: 6,
     },
     imgBack: {
         width: '100%',
