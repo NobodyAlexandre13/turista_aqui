@@ -1,9 +1,10 @@
 import { CardTuristic } from "@/components/CardTuristic";
+import { Category } from "@/components/Category";
 import { InputSearch } from "@/components/InputSearch";
 import { themes } from "@/constants/theme";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, FlatList, StyleSheet, View } from "react-native";
+import { Dimensions, FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type Turistic = {
@@ -17,6 +18,7 @@ const larguraSlider = width * 1;
 
 export default function Turistic(){
     const [ nome, setNome ] = useState("")
+    const [ active, setActive ] = useState("Todos")
     const flatListRef = useRef<FlatList>(null);
     const [ index, setIndex ] = useState(0)
     const [ turistic, setTuristic ] = useState<Turistic[]>([
@@ -91,6 +93,41 @@ export default function Turistic(){
                     nome={nome}
                     setNome={setNome}
                 />
+                <ScrollView 
+                    horizontal 
+                    showsHorizontalScrollIndicator={false}
+                >
+                    <Category 
+                        title="Todos"
+                        active={active}
+                        setActive={setActive}
+                        icon="map-marker-alt"
+                    />
+                    <Category 
+                        title="Onde Ficar"
+                        active={active}
+                        setActive={setActive}
+                        icon="hotel"
+                    />
+                    <Category 
+                        title="Onde Comer"
+                        active={active}
+                        setActive={setActive}
+                        icon="utensils"
+                    />
+                    <Category 
+                        title="Saúde"
+                        active={active}
+                        setActive={setActive}
+                        icon="hospital"
+                    />
+                    <Category 
+                        title="Transporte"
+                        active={active}
+                        setActive={setActive}
+                        icon="bus"
+                    />
+                </ScrollView>
             </View>
             
         </SafeAreaView>
