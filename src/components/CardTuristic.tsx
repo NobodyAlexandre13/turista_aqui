@@ -37,7 +37,7 @@ export function CardTuristic({ uri, nome, sobre }: Props){
 
 const style = StyleSheet.create({
     container: {
-        height: 275,
+        height: 270,
         borderBottomLeftRadius: 12,
         borderBottomRightRadius: 12
     },

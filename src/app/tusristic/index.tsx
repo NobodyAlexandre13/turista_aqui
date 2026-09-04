@@ -16,6 +16,7 @@ const larguraSlider = width * 1;
 
 
 export default function Turistic(){
+    const [ nome, setNome ] = useState("")
     const flatListRef = useRef<FlatList>(null);
     const [ index, setIndex ] = useState(0)
     const [ turistic, setTuristic ] = useState<Turistic[]>([
@@ -36,8 +37,6 @@ export default function Turistic(){
         }]
     )
 
-    const [ nome, setNome ] = useState("")
-
     useEffect(() => {
     const timer = setInterval(() => {
         const nextIndex = (index + 1) % turistic.length;
@@ -55,7 +54,7 @@ export default function Turistic(){
         }
 
         setIndex(nextIndex);
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(timer);
     }, [index]);
@@ -73,17 +72,27 @@ export default function Turistic(){
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item })=> <CardTuristic nome={item.nome} uri={item.uri} sobre={item.sobre} />}
+                    renderItem={
+                        ({ item }) => 
+                            <CardTuristic 
+                                nome={item.nome} 
+                                uri={item.uri} 
+                                sobre={item.sobre} 
+                            />
+                    }
                     onMomentumScrollEnd={e =>
                         setIndex(Math.round(e.nativeEvent.contentOffset.x / larguraSlider))
                     }
                 />
             </View>
-            <InputSearch 
-                title="Buscar sítio pelo nome"
-                nome={nome}
-                setNome={() => setNome()}
-            />
+            <View style={styles.areaMain}>
+                <InputSearch 
+                    title="Buscar sítio pelo nome"
+                    nome={nome}
+                    setNome={setNome}
+                />
+            </View>
+            
         </SafeAreaView>
     )
 }
@@ -95,6 +104,8 @@ const styles = StyleSheet.create({
     },
     carrossel: {
         width: '100%',
-        
+    },
+    areaMain: {
+        paddingHorizontal: 20,
     }
 })

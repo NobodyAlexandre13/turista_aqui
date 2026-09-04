@@ -7,7 +7,7 @@ import { Loading } from "./Loanding";
 interface Props{
     title: string;
     nome: string;
-    setNome: () => void;
+    setNome: (nome: string) => void;
 
 }
 
@@ -42,7 +42,7 @@ export function InputSearch({ title, nome, setNome, ...rest }: Props){
     }
 
     async function Search(){
-        if(!nome.trim()){
+        if(!nome){
             Alert.alert("Campo vazio","Por favor, digite o tipo, ex. Restaurante, Alojamento ou outro")
             return;
         }
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     width: "79%",
     borderRadius: 10,
     padding: 16,
-    color: themes.colors.text
+    color: themes.colors.text,
   },
   botton: {
     backgroundColor: themes.colors.secondary,
