@@ -6,12 +6,13 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 interface Props {
     uri: string;
     nome: string;
+    sobre: string
 }
 
 const { width } = Dimensions.get('window');
-const larguraSlider = width * 0.9;
+const larguraSlider = width;
 
-export function CardTuristic({ uri, nome }: Props){
+export function CardTuristic({ uri, nome, sobre }: Props){
 
     return(
         <View style={[style.container, { width: larguraSlider }]}>
@@ -26,6 +27,9 @@ export function CardTuristic({ uri, nome }: Props){
                 <View style={style.viewTitle}>
                     <Text style={style.title}>{ nome }</Text>
                 </View>
+                <View style={style.viewSobre}>
+                    <Text numberOfLines={3} style={style.sobre}>{ sobre }</Text>
+                </View>
             </LinearGradient>
         </View>
     )
@@ -33,13 +37,14 @@ export function CardTuristic({ uri, nome }: Props){
 
 const style = StyleSheet.create({
     container: {
-        height: 200,
-        borderRadius: 12,
-        marginHorizontal: 6,
+        height: 275,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12
     },
     imgBack: {
         width: '100%',
-        borderRadius: 12,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
         position: 'absolute',
         bottom: 0,
         left: 0,
@@ -49,7 +54,8 @@ const style = StyleSheet.create({
     },
     grad:{
         flex: 1,
-        borderRadius: 12,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
         width: '100%',
         alignItems: 'center',
         position: 'absolute',
@@ -60,12 +66,26 @@ const style = StyleSheet.create({
     },
     viewTitle: {
         position: 'absolute',
-        bottom: 16,
-        alignItems: 'flex-start'
+        bottom: 60,
+        width: '100%',
+        paddingHorizontal: 20,
+        paddingVertical: 6
     },
     title: {
         fontWeight: 600,
-        fontSize: 14,
+        fontSize: 16,
         color: themes.colors.surface,
+    },
+    viewSobre: {
+        position: 'absolute',
+        bottom: 16,
+        paddingHorizontal: 20,
+        width: '100%',
+
+    },
+    sobre: {
+        fontSize: 12,
+        color: themes.colors.surface,
+        textAlign: 'left'
     }
 })
