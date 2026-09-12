@@ -1,3 +1,4 @@
+import { CardCompany } from "@/components/CardCompany";
 import { CardTuristic } from "@/components/CardTuristic";
 import { Category } from "@/components/Category";
 import { InputSearch } from "@/components/InputSearch";
@@ -12,6 +13,14 @@ type Turistic = {
     uri: string,
     sobre: string
 }
+
+type Item = {
+    id: string;
+    avatar: string;
+    nome: string;
+    municipio: string
+}
+
 const { width } = Dimensions.get('window');
 const larguraSlider = width * 1;
 
@@ -21,6 +30,12 @@ export default function Turistic(){
     const [ active, setActive ] = useState("Todos")
     const flatListRef = useRef<FlatList>(null);
     const [ index, setIndex ] = useState(0)
+    const [ company, setCompany ] = useState([
+        {id: "1",
+        avatar: "https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img11.jpg",
+        nome: "Restaurante Serra da leba",
+        municipio: "Lubango"}
+    ])
     const [ turistic, setTuristic ] = useState<Turistic[]>([
         {
             nome: "Serra da Leba", 
@@ -40,25 +55,25 @@ export default function Turistic(){
     )
 
     useEffect(() => {
-    const timer = setInterval(() => {
-        const nextIndex = (index + 1) % turistic.length;
+        const timer = setInterval(() => {
+            const nextIndex = (index + 1) % turistic.length;
 
-        if (nextIndex === 0) {
-        flatListRef.current?.scrollToOffset({
-            offset: 0,
-            animated: true,
-        });
-        } else {
-        flatListRef.current?.scrollToIndex({
-            index: nextIndex,
-            animated: true,
-        });
-        }
+            if (nextIndex === 0) {
+            flatListRef.current?.scrollToOffset({
+                offset: 0,
+                animated: true,
+            });
+            } else {
+            flatListRef.current?.scrollToIndex({
+                index: nextIndex,
+                animated: true,
+            });
+            }
 
-        setIndex(nextIndex);
-    }, 5000);
+            setIndex(nextIndex);
+        }, 8000);
 
-    return () => clearInterval(timer);
+        return () => clearInterval(timer);
     }, [index]);
 
     function back(){
@@ -128,8 +143,15 @@ export default function Turistic(){
                         icon="bus"
                     />
                 </ScrollView>
+                <View>
+                    <CardCompany
+                        id = "1"
+                        avatar = "https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img11.jpg"
+                        nome = "Restaurante Serra da leba"
+                        municipio =  "Lubango"
+                    />
+                </View>
             </View>
-            
         </SafeAreaView>
     )
 }
