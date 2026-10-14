@@ -1,5 +1,6 @@
 import { themes } from "@/constants/theme";
 import { FontAwesomeFreeSolid } from "@react-native-vector-icons/fontawesome-free-solid";
+import { router } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
 
 export function CardCompany({ id, avatar, nome, municipio }: Props){
     function viewsMore(id: string, nome: string) {
-        console.log("Boa clicado")
+        router.push("/company")
     }
 
     function handleMark(id: string){
@@ -105,5 +106,4 @@ const styles = StyleSheet.create({
         fontFamily: themes.fonts.medium,
         fontSize: 13,
     }
-
 })
