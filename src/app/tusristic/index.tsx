@@ -2,10 +2,14 @@ import { CardCompany } from "@/components/CardCompany";
 import { CardTuristic } from "@/components/CardTuristic";
 import { Category } from "@/components/Category";
 import { InputSearch } from "@/components/InputSearch";
+import { Loading } from "@/components/Loanding";
 import { themes } from "@/constants/theme";
+import { useProvince } from "@/context/provinceContext";
+import { getCompany, getExplore } from "@/hooks/getDate";
+import { categorias } from "@/utils/data";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, FlatList, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type Turistic = {
@@ -14,11 +18,11 @@ type Turistic = {
     sobre: string
 }
 
-type Item = {
+type Company = {
     id: string;
     avatar: string;
     nome: string;
-    municipio: string
+    municipio: string;
 }
 
 const { width } = Dimensions.get('window');
@@ -30,31 +34,43 @@ export default function Turistic(){
     const [ active, setActive ] = useState("Todos")
     const flatListRef = useRef<FlatList>(null);
     const [ index, setIndex ] = useState(0)
-    const [ company, setCompany ] = useState([
-        {id: "1",
-        avatar: "https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img11.jpg",
-        nome: "Restaurante Serra da leba",
-        municipio: "Lubango"}
-    ])
-    const [ turistic, setTuristic ] = useState<Turistic[]>([
-        {
-            nome: "Serra da Leba", 
-            uri: "https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img11.jpg",
-            sobre: "A Serra da Leba é uma das estradas mais icônicas de Angola, localizada na província do Namibe. Esta estrada sinuosa e desafiadora atravessa a Serra da Leba, oferecendo vistas panorâmicas deslumbrantes das montanhas e vales circundantes. É famosa por suas curvas fechadas e paisagens dramáticas, tornando-se um destino popular para turistas e entusiastas de condução."
-        }, 
-        {
-            nome: "Miradouro da Lua", 
-            uri: "https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img1.jpg",
-            sobre: "O Miradouro da Lua é um dos pontos de vista mais populares de Angola, localizado na província do Huambo. Oferece uma vista deslumbrante sobre a paisagem circundante, especialmente durante o pôr do sol."
-        }, 
-        {
-            nome: "Miradouro da Lua", 
-            uri: "https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img1.jpg",
-            sobre: "O Miradouro da Lua é um dos pontos de vista mais populares de Angola, localizado na província do Huambo. Oferece uma vista deslumbrante sobre a paisagem circundante, especialmente durante o pôr do sol."
-        }]
-    )
+    const [ category, setCategory ] = useState("Todos")
+    const [company, setCompany] = useState<Company[] | any>()
+    const { province } = useProvince()
+    const [ turistic, setTuristic ] = useState<Turistic[] | any>()
+
+    async function getTuristic(){
+        const tur = await getExplore(province, 3);
+
+        setTuristic(tur)
+    }
+
+    useEffect(()=>{
+        getTuristic()
+    },[province])
+
+    async function getComp(){
+        let filtro = "";
+
+        if (category === "Todos") filtro = "";
+        if (category === "Onde Ficar") filtro = "Onde Ficar";
+        if (category === "Onde Comer") filtro = "Onde Comer";
+        if (category === "Transporte & Mobilidade") filtro = "Transporte & Mobilidade";
+        if (category === "Compras e artesanato") filtro = "Compras e artesanato";
+        if (category === "Serviços úteis") filtro = "Serviços úteis"
+
+        const comp = await getCompany(province, filtro)
+
+        setCompany(comp)
+    }
+
+    useEffect(()=>{
+        getComp();
+    }, [province, category])
 
     useEffect(() => {
+        if (!turistic?.length) return;
+
         const timer = setInterval(() => {
             const nextIndex = (index + 1) % turistic.length;
 
@@ -74,7 +90,16 @@ export default function Turistic(){
         }, 8000);
 
         return () => clearInterval(timer);
-    }, [index]);
+    }, [index, turistic]);
+
+    if(!company){
+        return(
+            <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                <Loading size={24}/>
+                <Text>Carregando...</Text>
+            </View>   
+        )
+    }
 
     function back(){
         router.back()
@@ -108,49 +133,24 @@ export default function Turistic(){
                     nome={nome}
                     setNome={setNome}
                 />
-                <ScrollView 
-                    horizontal 
-                    showsHorizontalScrollIndicator={false}
-                >
-                    <Category 
-                        title="Todos"
-                        active={active}
-                        setActive={setActive}
-                        icon="map-marker-alt"
-                    />
-                    <Category 
-                        title="Onde Ficar"
-                        active={active}
-                        setActive={setActive}
-                        icon="hotel"
-                    />
-                    <Category 
-                        title="Onde Comer"
-                        active={active}
-                        setActive={setActive}
-                        icon="utensils"
-                    />
-                    <Category 
-                        title="Saúde"
-                        active={active}
-                        setActive={setActive}
-                        icon="hospital"
-                    />
-                    <Category 
-                        title="Transporte"
-                        active={active}
-                        setActive={setActive}
-                        icon="bus"
-                    />
-                </ScrollView>
                 <View>
-                    <CardCompany
-                        id = "1"
-                        avatar = "https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img11.jpg"
-                        nome = "Restaurante Serra da leba"
-                        municipio =  "Lubango"
-                    />
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{marginBottom: 10}}>
+                        {categorias.map((item, index) => (
+                            <Category 
+                                title={item.name}
+                                active={active}
+                                setActive={setActive}
+                                icon={item.icon}
+                            />
+                        ))}
+                    </ScrollView>
                 </View>
+                <FlatList
+                    data={company}
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({item}) => <CardCompany item={item}/>}
+                />
             </View>
         </SafeAreaView>
     )
@@ -166,5 +166,6 @@ const styles = StyleSheet.create({
     },
     areaMain: {
         paddingHorizontal: 20,
+        flex: 1
     }
 })

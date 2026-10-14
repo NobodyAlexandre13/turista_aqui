@@ -7,6 +7,8 @@ import { styles } from "../../styles/styles.inital";
 // link imagem do fundo: https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img11.jpg
 
 export default function HomeScreen() {
+
+  
   return (
     <ImageBackground
         source={{uri : "https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img1.jpg"}}

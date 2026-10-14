@@ -32,7 +32,8 @@
           "image": "./assets/images/turistaicone.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

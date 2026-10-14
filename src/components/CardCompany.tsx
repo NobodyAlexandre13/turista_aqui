@@ -12,11 +12,17 @@ interface Props {
 
 export function CardCompany({ id, avatar, nome, municipio }: Props){
     function viewsMore(id: string, nome: string) {
-        router.push("/company")
+        router.push({
+            pathname: "./company",
+            params: { id, nome }
+        });
     }
 
     function handleMark(id: string){
-        console.log("Clicado...")
+        router.push({
+            pathname: "./mark",
+            params: { id }
+        })
     }
 
     return(

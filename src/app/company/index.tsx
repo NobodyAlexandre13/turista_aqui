@@ -1,7 +1,6 @@
-//import { Loading } from "@/components/Loading";
 import { Loading } from "@/components/Loanding";
 import { themes } from "@/constants/theme";
-//import { getCompanyDetails } from "@/hooks/getDate";
+import { getCompanyDetails } from "@/hooks/getDate";
 import { FontAwesomeFreeSolid } from "@react-native-vector-icons/fontawesome-free-solid";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -24,17 +23,8 @@ export default function Details(){
     const [ company, setCompany ] = useState<CompanyDetails | any>()
     const { id } = useLocalSearchParams()
 
-    function getCompany(){
-        const data = {
-            avatar: "https://tadlbisulxryzycsahmu.supabase.co/storage/v1/object/public/turistic/img11.jpg",
-            nome: "Restaurante Sei Lá",
-            provincia: "Huíla",
-            municipio: "Lubango",
-            sobre: "Trabalhamos muito bem, respeitamos os clientes e muito mais entregamos tudo de bom, os melhores pratos para os nossos clientes e isso nos ajuda muito, agradar os nossos clientes!...",
-            horario: "8h às 19h:30min",
-            tel: "999999999",
-            email: "restauraseila@gmail.com"
-        }
+    async function getCompany(){
+        const data = await getCompanyDetails(id)
 
         setCompany(data)
     }
@@ -46,8 +36,8 @@ export default function Details(){
 
     function handleMark(){
         router.push({
-            pathname: "/tusristic",
-            params: { id : "1235" }
+            pathname: "./mark",
+            params: { id }
         })
     }
 
@@ -57,7 +47,7 @@ export default function Details(){
 
     useEffect(() => {
         getCompany();
-    }, [])
+    }, [company])
 
 
     if(!company){
@@ -73,10 +63,10 @@ export default function Details(){
         <SafeAreaView edges={["top", "left", "right", "bottom"]} style={styles.container}>
             <View style={styles.header}> 
                 <TouchableOpacity onPress={back}>
-                    <FontAwesomeFreeSolid name="chevron-left" size={28} color={themes.colors.text} />
+                    <FontAwesomeFreeSolid name="chevron-left" size={20} color={themes.colors.text} />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <FontAwesomeFreeSolid name="heart" size={28} color={themes.colors.textSecondary}/>
+                    <FontAwesomeFreeSolid name="heart-crack" size={20} color={themes.colors.text}/>
                 </TouchableOpacity>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={{marginTop: 10}} contentContainerStyle={{paddingBottom: 60}}>
@@ -118,7 +108,7 @@ export default function Details(){
                     <View style={styles.areaNumber}>
                         <Text style={styles.local}>Telefone: </Text>
                         <TouchableOpacity style={styles.buttonNumber} onPress={()=> ligar(company.tel)}>
-                            <FontAwesomeFreeSolid name="coffee" color={themes.colors.surface} size={17} />
+                            <FontAwesomeFreeSolid name="contact-card" color={themes.colors.surface} size={17} />
                             <Text style={styles.textBtnNumber}>{company?.tel}</Text>
                         </TouchableOpacity>
                     </View>

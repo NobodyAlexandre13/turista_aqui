@@ -1,4 +1,5 @@
 import { themes } from "@/constants/theme";
+import { useProvince } from "@/context/provinceContext";
 import { FontAwesomeFreeSolid } from "@react-native-vector-icons/fontawesome-free-solid";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -6,17 +7,16 @@ import { FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } 
 import { Alert } from "./Alert";
 
 export function Select(){
+    const  { setProvince } = useProvince();
     const [visible, setVisible] = useState(false);
     const [selectedDestino, setSelectedDestino] = useState("Selecione o destino");
     const [ error, setError ] = useState(false)
     const [ msgError, setMsgError ] = useState("")
     const [ destinos, setDestinos ] = useState(
         [
-            {nome: "Luanda"}, 
-            {nome: "Benguela"}, 
-            {nome: "Namibe"}, 
-            {nome: "Huíla"}, 
-            {nome: "Huambo"}
+            {nome: "Luanda"},
+            {nome: "Namibe"},
+            {nome: "Lunda Sul"}
         ]
     )
 
@@ -27,6 +27,7 @@ export function Select(){
             return;
         }
 
+        setProvince(selectedDestino);
         router.push("/tusristic")
     }
 
